@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-    <!-- ====== MODAL SOO DHAWEYN (Magaca + Email) ====== -->
+    <!-- ====== MODAL SOO DHAWEYN ====== -->
     <div class="welcome-modal" id="welcomeModal">
         <div class="welcome-modal-content">
             <div class="welcome-icon">
@@ -153,7 +153,7 @@
         </div>
     </section>
 
-    <!-- ====== QAYBTA DADKA SOO BOQDAY (TABLE - WAQTI DHAN) ====== -->
+    <!-- ====== QAYBTA DADKA SOO BOQDAY (TABLE) ====== -->
     <section class="visitor-log">
         <div class="log-container">
             <div class="log-header">
@@ -236,7 +236,7 @@
         const logCount = document.getElementById('logCount');
 
         // ================================================================
-        // 1. RENDER TABLE (Waxay soo bandhigtaa liiska dadka)
+        // 1. RENDER TABLE (Waxay soo bandhigtaa liiska dadka oo dhan)
         // ================================================================
         function renderTable(dataArray) {
             if (!dataArray || dataArray.length === 0) {
@@ -244,7 +244,7 @@
                 if (logCount) logCount.textContent = '0';
                 return;
             }
-            // U kala sooc kuwa ugu cusub
+            // U kala sooc kuwa ugu cusub (kuwa ugu dambeeyay hore)
             const sorted = [...dataArray].reverse();
             tbody.innerHTML = sorted.map(entry => `
                 <tr>
@@ -263,7 +263,42 @@
         }
 
         // ================================================================
-        // 2. DHEGEYSO FIREBASE (Real-time)
+        // 2. MIGRATION: KA SOO GUURI LOCALSTORAGE => FIREBASE (SI TOOS AH)
+        //    (Si aadan 47-ka qof ee hore u jirtay u lumin)
+        // ================================================================
+        function migrateLocalData() {
+            const localLog = localStorage.getItem('visitorLog');
+            const migratedFlag = localStorage.getItem('migratedToFirebase');
+            
+            if (localLog && !migratedFlag) {
+                try {
+                    const entries = JSON.parse(localLog);
+                    if (entries.length > 0) {
+                        // Ku dar wax walba si toos ah (background)
+                        entries.forEach((entry, index) => {
+                            // Dib ugu dar si looga fogaado duplicte (laakin waan ku dari karnaa)
+                            // Si looga fogaado in ay soo noqoto, waxaan isticmaalnaa delay yar si uusan u culeyn
+                            setTimeout(() => {
+                                addDoc(visitorsRef, {
+                                    name: entry.name,
+                                    email: entry.email,
+                                    timestamp: entry.timestamp || new Date().toLocaleString('en-GB'),
+                                    createdAt: new Date()
+                                }).catch(e => console.log("Migration error for entry", index, e));
+                            }, index * 100); // 0.1 seconds between each to avoid rate limits
+                        });
+                        // Calaamadee in la soo guuray
+                        localStorage.setItem('migratedToFirebase', 'true');
+                        console.log(`🚀 Migrating ${entries.length} visitors from localStorage to Firebase...`);
+                    }
+                } catch (e) {
+                    console.error("Migration failed", e);
+                }
+            }
+        }
+
+        // ================================================================
+        // 3. DHEGEYSO FIREBASE (Real-time) - Dadka oo dhan
         // ================================================================
         const q = query(visitorsRef, orderBy("createdAt", "desc"));
         let allData = [];
@@ -275,13 +310,23 @@
             });
             allData = results;
             renderTable(allData);
+            
+            // Marka ugu horreysa ee data soo baxdo, wakhti fiican oo migration ku sameeyo
+            if (allData.length === 0) {
+                // Haddii aan waxba jirin, tusaale u samee migration si toos ah
+                migrateLocalData();
+            }
         }, (error) => {
             console.error("Firebase error:", error);
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#f43f5e;padding:20px;">Qalad ayaa dhacay. Hubi in Firefox config-ka sax yahay & Internet-ka shaqeynayo.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#f43f5e;padding:20px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> Qalad ayaa dhacay. Hubi in Firebase config-ka sax yahay & Internet-ka shaqeynayo.
+            </td></tr>`;
+            // Haddii qalad dhaco, wali isku day inaad soo guuriso local data
+            migrateLocalData();
         });
 
         // ================================================================
-        // 3. MODAL SOO DHAWEYN + U DIR FIREBASE (SI TOOS AH)
+        // 4. MODAL SOO DHAWEYN (Si toos ah u xir + u dir Firebase)
         // ================================================================
         const hasSubmitted = localStorage.getItem('firebaseSubmitted');
 
@@ -293,9 +338,6 @@
             modal.style.display = 'flex';
         }
 
-        // ================================================================
-        // WELCOME BUTTON - HADDAN SI TOOS AH U XIRA MODAL-KA
-        // ================================================================
         welcomeBtn.addEventListener('click', () => {
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
@@ -309,12 +351,10 @@
                 return;
             }
 
-            // -----------------------------------------------------------------
-            // 1. SI TOOS AH U QARI MODAL (Bogga isla markiiba wuu soo baxayaa)
-            // -----------------------------------------------------------------
+            // 1. SI TOOS AH U QARI MODAL
             modal.style.display = 'none';
 
-            // 2. Cusboonaysii farriinta soo dhaweynta isla markiiba
+            // 2. Cusboonaysii farriinta
             greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
 
             // 3. Kaydi local si uusan modal mar kale u soo bixin
@@ -332,25 +372,23 @@
                 second: '2-digit'
             }).replace(/\//g, '/');
 
-            // 5. Firebase ku dar BACKGROUND (si uusan bogga u xannixin)
-            //    Waxaan isticmaalnaa .then().catch() si uusan UI-ka u hakin.
+            // 5. Firebase ku dar BACKGROUND
             addDoc(visitorsRef, {
                 name: name,
                 email: email,
                 timestamp: timestamp,
                 createdAt: new Date()
             }).catch((error) => {
-                // Haddii qalad dhaco, kaliya console ku qor, si uusan isticmaale u argagaxin
-                console.error("Firebase qalad (laakin waa background): ", error);
+                console.error("Firebase qalad (background): ", error);
             });
         });
 
-        // U oggolow Enter-ka (si toos ah)
+        // U oggolow Enter-ka
         nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
         emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
 
         // ================================================================
-        // 4. HAMBURGER MENU
+        // 5. HAMBURGER MENU
         // ================================================================
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');
@@ -373,6 +411,9 @@
                 hamburger.querySelector('i').classList.add('fa-bars');
             });
         });
+
+        // Marka ugu horreysa ee la soo galo, isku day inaad soo guuriso
+        setTimeout(migrateLocalData, 2000);
     </script>
 </body>
 </html>

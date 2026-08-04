@@ -9,18 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-    <!-- ====== MODAL SOO DHAWEYN (waxaa lagu daray Email) ====== -->
+    <!-- ====== MODAL SOO DHAWEYN (Magaca + Email) ====== -->
     <div class="welcome-modal" id="welcomeModal">
         <div class="welcome-modal-content">
             <div class="welcome-icon">
                 <i class="fa-solid fa-hand-wave"></i>
             </div>
             <h2>Soo Dhawoow!</h2>
-            <p>Fadlan gali magacaaga iyo email-kaaga si aan kuugu soo dhaweyno</p>
+            <p>Fadlan gali magacaaga iyo email-kaaga si aad ugu soo biirto liiska booqdayaasha</p>
             <input type="text" id="nameInput" placeholder="Magacaa..." maxlength="30" />
             <input type="email" id="emailInput" placeholder="Gmail ama Email-ka..." maxlength="50" />
             <button id="welcomeBtn"><i class="fa-solid fa-arrow-right"></i> Soco</button>
-            <p class="welcome-hint">Magacaaga waxaa lagu dari doonaa liiska booqdayaasha</p>
+            <p class="welcome-hint">Dadka kale waxay arki doonaan magacaaga</p>
         </div>
     </div>
 
@@ -153,7 +153,7 @@
         </div>
     </section>
 
-    <!-- ====== QAYBTA CUSUB: DADKA SOO BOOQDAY (TABLE LIST) ====== -->
+    <!-- ====== QAYBTA DADKA SOO BOOQDAY (TABLE - WAQTI DHAN) ====== -->
     <section class="visitor-log">
         <div class="log-container">
             <div class="log-header">
@@ -172,7 +172,7 @@
                         </tr>
                     </thead>
                     <tbody id="visitorTableBody">
-                        <!-- waxaa buuxiya JavaScript -->
+                        <!-- JS ayaa buuxinaya -->
                     </tbody>
                 </table>
             </div>
@@ -192,60 +192,111 @@
 
     <script async src="//finicounter.eu.org/finicounter.js"></script>
 
-    <script>
-        // ============================================================
-        // 1. WELCOME MODAL (WITH NAME + EMAIL)
-        // ============================================================
+    <!-- ============================================================ -->
+    <!-- FIREBASE (Waa inaad ku beddeshaa config-kaaga)                -->
+    <!-- ============================================================ -->
+    <script type="module">
+        // ------------------------------------------------------------------
+        // !!! KU BEDDEL HALKAN FIREBASE CONFIG-KAAGA (Nuqul ka qaado Firebase Console) !!!
+        // ------------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummy_Example_ReplaceMe",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+        // ------------------------------------------------------------------
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            query, 
+            orderBy, 
+            onSnapshot,
+            getDocs,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const visitorsRef = collection(db, "visitors");
+
+        // ================================================================
+        // ELEMENTS
+        // ================================================================
         const modal = document.getElementById('welcomeModal');
         const nameInput = document.getElementById('nameInput');
         const emailInput = document.getElementById('emailInput');
         const welcomeBtn = document.getElementById('welcomeBtn');
         const greetingText = document.getElementById('greetingText');
+        const tbody = document.getElementById('visitorTableBody');
+        const logCount = document.getElementById('logCount');
 
-        // Tixgelin badbaado: ka hortag HTML injection
+        // ================================================================
+        // 1. RENDER TABLE (Waxay soo bandhigtaa liiska dadka)
+        // ================================================================
+        function renderTable(dataArray) {
+            if (!dataArray || dataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:rgba(255,255,255,0.5);padding:30px 0;">Wali ma jiro qof soo booqday</td></tr>`;
+                if (logCount) logCount.textContent = '0';
+                return;
+            }
+            // U kala sooc kuwa ugu cusub (hadii aan sida loo soo kala saarin)
+            const sorted = [...dataArray].reverse(); // kuwa ugu dambeeyay ugu sareeya
+            tbody.innerHTML = sorted.map(entry => `
+                <tr>
+                    <td><strong>${escapeHtml(entry.name || 'Unknown')}</strong></td>
+                    <td><i class="fa-regular fa-envelope" style="color:#38bdf8;margin-right:6px;"></i>${escapeHtml(entry.email || 'No email')}</td>
+                    <td><i class="fa-regular fa-clock" style="color:#94a3b8;margin-right:6px;"></i>${escapeHtml(entry.timestamp || 'Just now')}</td>
+                </tr>
+            `).join('');
+            if (logCount) logCount.textContent = dataArray.length;
+        }
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // Shaqada soo bandhigida table-ka
-        function renderVisitorTable() {
-            const tbody = document.getElementById('visitorTableBody');
-            const log = JSON.parse(localStorage.getItem('visitorLog')) || [];
-            const countSpan = document.getElementById('logCount');
-            if (countSpan) countSpan.textContent = log.length;
+        // ================================================================
+        // 2. DHEGEYSO FIREBASE (Real-time) - Had iyo jeer waxay soo cusboonaysaa
+        // ================================================================
+        const q = query(visitorsRef, orderBy("createdAt", "desc")); // Kuwa ugu dambeeyay hore
+        let allData = [];
 
-            if (log.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:rgba(255,255,255,0.5);padding:30px 0;">Wali ma jiro qof soo booqday</td></tr>`;
-                return;
-            }
+        onSnapshot(q, (snapshot) => {
+            const results = [];
+            snapshot.forEach((doc) => {
+                results.push(doc.data());
+            });
+            allData = results;
+            renderTable(allData);
+        }, (error) => {
+            console.error("Firebase error:", error);
+            // Haddii qalad dhaco, tusaale u sheeg isticmaale inuu hubiyo config-ka
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#f43f5e;padding:20px;">Qalad ayaa dhacay. Hubi in Firefox config-ka sax yahay & Internet-ka shaqeynayo.</td></tr>`;
+        });
 
-            // U kala sooc si ugu cusub ugu sareeyo
-            const reversed = [...log].reverse();
-            tbody.innerHTML = reversed.map(entry => `
-                <tr>
-                    <td><strong>${escapeHtml(entry.name)}</strong></td>
-                    <td><i class="fa-regular fa-envelope" style="color:#38bdf8;margin-right:6px;"></i>${escapeHtml(entry.email)}</td>
-                    <td><i class="fa-regular fa-clock" style="color:#94a3b8;margin-right:6px;"></i>${escapeHtml(entry.timestamp)}</td>
-                </tr>
-            `).join('');
-        }
+        // ================================================================
+        // 3. MODAL SOO DHAWEYN + U DIR FIREBASE
+        // ================================================================
+        // Hubi haddii qofkan hore u soo galay (kaydin local)
+        const hasSubmitted = localStorage.getItem('firebaseSubmitted');
 
-        // Hubi haddii magaca iyo email-ka hore ugu kaydsan yihiin
-        const storedName = localStorage.getItem('visitorName');
-        const storedEmail = localStorage.getItem('visitorEmail');
-
-        if (storedName && storedEmail) {
+        if (hasSubmitted) {
             modal.style.display = 'none';
+            const storedName = localStorage.getItem('visitorName') || 'Walaal';
             greetingText.textContent = `Mahadsanid Walaal ${storedName} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
-            renderVisitorTable(); // soo bandhig table-ka haddii hore loo galay
         } else {
             modal.style.display = 'flex';
         }
 
-        // Dhageyso badhanka "Soco"
-        welcomeBtn.addEventListener('click', function () {
+        welcomeBtn.addEventListener('click', async () => {
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
 
@@ -258,10 +309,6 @@
                 return;
             }
 
-            // Kaydi magaca iyo email-ka
-            localStorage.setItem('visitorName', name);
-            localStorage.setItem('visitorEmail', email);
-
             // Diyaari waqtiga
             const now = new Date();
             const timestamp = now.toLocaleString('en-GB', {
@@ -273,29 +320,38 @@
                 second: '2-digit'
             }).replace(/\//g, '/');
 
-            // Ku dar liiska booqdayaasha
-            let log = JSON.parse(localStorage.getItem('visitorLog')) || [];
-            const newEntry = { name, email, timestamp };
-            log.push(newEntry);
-            localStorage.setItem('visitorLog', JSON.stringify(log));
+            try {
+                // Ku dar Firestore
+                await addDoc(visitorsRef, {
+                    name: name,
+                    email: email,
+                    timestamp: timestamp,
+                    createdAt: new Date() // si loo kala saaro
+                });
 
-            // Qari modal
-            modal.style.display = 'none';
+                // Kaydi local si aan modal mar kale u soo bixin
+                localStorage.setItem('firebaseSubmitted', 'true');
+                localStorage.setItem('visitorName', name);
 
-            // Cusboonaysii farriinta soo dhaweynta
-            greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
+                // Qari modal
+                modal.style.display = 'none';
+                greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
 
-            // Soo bandhig table-ka
-            renderVisitorTable();
+                // Table-ka waxaa si toos ah u cusboonaysiinaya onSnapshot
+
+            } catch (error) {
+                alert('Qalad ayaa dhacay. Hubi internet-kaaga ama Firebase config-ka.');
+                console.error("Error adding document: ", error);
+            }
         });
 
         // U oggolow Enter-ka
         nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
         emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
 
-        // ============================================================
-        // 2. HAMBURGER MENU (sidoo kale)
-        // ============================================================
+        // ================================================================
+        // 4. HAMBURGER MENU (sidoo kale)
+        // ================================================================
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');
         hamburger.addEventListener('click', () => {
@@ -317,12 +373,6 @@
                 hamburger.querySelector('i').classList.add('fa-bars');
             });
         });
-
-        // Hadii table uu hore uga jiro localStorage marka la soo galo, soo bandhig
-        // (tan waxaa loogu talagalay haddii aan modal soo bixin)
-        if (localStorage.getItem('visitorLog')) {
-            renderVisitorTable();
-        }
     </script>
 </body>
 </html>

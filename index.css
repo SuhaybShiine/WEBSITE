@@ -9,7 +9,7 @@ body {
     color: #333;
 }
 
-/* ========== MODAL WELCOME (waxaa lagu daray email input) ========== */
+/* ========== MODAL WELCOME ========== */
 .welcome-modal {
     position: fixed;
     inset: 0;
@@ -224,7 +224,7 @@ table td i {
 }
 
 /* ============================================================ */
-/* HALKAN WAXAA KA SOO BILAABANAYAA CSS-KAAGA ASALKA AH (LAMA BEDDELIN) */
+/* HALKAN WAXAA KA SOO BILAABANAYAA CSS-KAAGA ASALKA AH         */
 /* ============================================================ */
 
 .main {

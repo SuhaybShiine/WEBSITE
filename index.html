@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Suheib Shiine</title>
-    <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <!-- Modal soo dhaweyn -->
-    <div class="welcome-modal" id="welcomeModal">
-        <div class="welcome-modal-content">
-            <div class="welcome-icon">
-                <i class="fa-solid fa-hand-wave"></i>
+
+    <!-- Welcome Modal -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-box">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <h2>Soo dhawoow Walaal!</h2>
+            <p id="welcomeMessage">Mahadsanid Walaal sida quruxda badan ee aad noo soo booqatay SHUKRAN</p>
+            <input type="text" id="visitorName" placeholder="Magacaaga geli..." maxlength="40">
+            <div class="welcome-btns">
+                <button class="welcome-btn primary" id="submitName">
+                    <i class="fa-solid fa-check"></i> Xaqiiji
+                </button>
+                <button class="welcome-btn secondary" id="skipName">Skip</button>
             </div>
-            <h2>Soo Dhawoow!</h2>
-            <p>Fadlan gali magacaaga si aan kuugu soo dhaweyno</p>
-            <input type="text" id="nameInput" placeholder="Magacaa..." maxlength="30" />
-            <button id="welcomeBtn"><i class="fa-solid fa-arrow-right"></i> Soco</button>
-            <p class="welcome-hint">Waxaad ku soo dhaweyn doontaa bogga</p>
         </div>
     </div>
 
-    <!-- Bogga weyn -->
     <div class="main">
-        <!-- Navbar -->
         <div class="navbar">
             <div class="icon">
                 <h2 class="logo">SUHEIB SHIINE</h2>
             </div>
+          
             <div class="menu" id="menu">
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-house"></i> HOME</a></li>
@@ -39,27 +41,23 @@
                     <li><a href="#"><i class="fa-solid fa-envelope"></i> CONTACT</a></li>
                 </ul>
             </div>
+          
             <div class="search">
-                <input class="srch" type="search" placeholder="Type to search..." />
+                <input class="srch" type="search" placeholder="Type to search...">
                 <button class="btn">Search</button>
             </div>
+          
             <div class="hamburger" id="hamburger">
                 <i class="fa-solid fa-bars"></i>
             </div>
         </div>
-
-        <!-- Content -->
+      
         <div class="content">
             <div class="image-side">
-                <img src="image/sh.jpg" alt="Web Design" />
+                <img src="image/sh.jpg" alt="Web Design">
             </div>
             <div class="text-side">
-                <!-- Farriinta soo dhaweynta oo lagu daray magaca -->
-                <div id="greetingMessage" class="greeting-box">
-                    <i class="fa-solid fa-heart" style="color: #f43f5e;"></i>
-                    <span id="greetingText">Mahadsanid Walaal</span>
-                </div>
-                <h1>Web Design & <br /><span>Development</span> Course</h1>
+                <h1>Web Design & <br><span>Development</span> Course</h1>
                 <p class="par">
                     I am a passionate web designer and developer with a keen eye for detail.
                     My goal is to create visually appealing and user-friendly websites that
@@ -72,7 +70,6 @@
         </div>
     </div>
 
-    <!-- Favorites -->
     <section class="favorites">
         <div class="favorites-header">
             <h2>My Favorite Things</h2>
@@ -81,7 +78,7 @@
         <div class="cards">
             <div class="card">
                 <div class="card-img">
-                    <img src="image/img3.png" alt="Web Developer" />
+                    <img src="image/img3.png" alt="Web Developer">
                 </div>
                 <div class="card-content">
                     <div class="card-icon"><i class="fa-solid fa-code"></i></div>
@@ -91,7 +88,7 @@
             </div>
             <div class="card">
                 <div class="card-img">
-                    <img src="image/img4.png" alt="Network Engineer" />
+                    <img src="image/img4.png" alt="Network Engineer">
                 </div>
                 <div class="card-content">
                     <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
@@ -101,7 +98,7 @@
             </div>
             <div class="card">
                 <div class="card-img">
-                    <img src="image/img5.png" alt="Dropshipping" />
+                    <img src="image/img5.png" alt="Dropshipping">
                 </div>
                 <div class="card-content">
                     <div class="card-icon"><i class="fa-solid fa-cart-shopping"></i></div>
@@ -112,7 +109,6 @@
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="cta">
         <div class="cta-wrapper">
             <div class="cta-left">
@@ -134,16 +130,16 @@
                 <form class="cta-form">
                     <h3>Create Account</h3>
                     <div class="form-group">
-                        <input type="text" placeholder="Username" required />
+                        <input type="text" placeholder="Username" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" placeholder="Email" required />
+                        <input type="email" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" placeholder="Password" required />
+                        <input type="password" placeholder="Password" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" placeholder="Confirm Password" required />
+                        <input type="password" placeholder="Confirm Password" required>
                     </div>
                     <button type="submit" class="form-btn">
                         <i class="fa-solid fa-user-plus"></i> Sign Up
@@ -152,67 +148,31 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
+ 
+    <!-- ========== FOOTER with Number + Names List ========== -->
     <footer class="footer">
         <div class="footer-content">
             <p class="visitor-msg">
                 <i class="fa-solid fa-users"></i>
                 Dadka soo booqday: <span id="finicount_views">...</span>
             </p>
+
+            <!-- Liiska Magacyada -->
+            <div class="visitors-list-box">
+                <h4><i class="fa-solid fa-list"></i> Magacyada Dadka soo Booqday</h4>
+                <ul id="visitorsList">
+                    <li class="empty">Weli qof magac ma gelin...</li>
+                </ul>
+            </div>
+
             <p class="copyright">© 2026 Suheib Shiine. All rights reserved.</p>
         </div>
     </footer>
-
+ 
     <script async src="//finicounter.eu.org/finicounter.js"></script>
-
+ 
     <script>
-        // ===================== WELCOME MODAL =====================
-        const modal = document.getElementById('welcomeModal');
-        const nameInput = document.getElementById('nameInput');
-        const welcomeBtn = document.getElementById('welcomeBtn');
-        const greetingText = document.getElementById('greetingText');
-
-        // Hubi haddii magaca uu hore ugu kaydsan yahay localStorage
-        const storedName = localStorage.getItem('visitorName');
-
-        if (storedName) {
-            // Haddii magaca jiro, muuji farriinta soo dhaweynta isla markiiba
-            modal.style.display = 'none';
-            updateGreeting(storedName);
-        } else {
-            // Haddii aan jirin, soo bandhig modal-ka
-            modal.style.display = 'flex';
-        }
-
-        // Dhageyso badhanka "Soco"
-        welcomeBtn.addEventListener('click', function () {
-            const name = nameInput.value.trim();
-            if (name === '') {
-                alert('Fadlan gali magacaa.');
-                return;
-            }
-            // Kaydi magaca
-            localStorage.setItem('visitorName', name);
-            // Qari modal
-            modal.style.display = 'none';
-            // Cusboonaysii farriinta
-            updateGreeting(name);
-        });
-
-        // U oggolow in Enter lagu riixo
-        nameInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                welcomeBtn.click();
-            }
-        });
-
-        // Shaqada cusboonaysiinta farriinta
-        function updateGreeting(name) {
-            greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
-        }
-
-        // ===================== HAMBURGER MENU =====================
+        // ========== Hamburger Menu ==========
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');
         hamburger.addEventListener('click', () => {
@@ -226,7 +186,7 @@
                 icon.classList.add('fa-bars');
             }
         });
-
+       
         document.querySelectorAll('.menu a').forEach(link => {
             link.addEventListener('click', () => {
                 menu.classList.remove('active');
@@ -234,6 +194,101 @@
                 hamburger.querySelector('i').classList.add('fa-bars');
             });
         });
+
+        // ========== Welcome Modal + Visitor Name System ==========
+        const overlay = document.getElementById('welcomeOverlay');
+        const nameInput = document.getElementById('visitorName');
+        const submitBtn = document.getElementById('submitName');
+        const skipBtn = document.getElementById('skipName');
+        const welcomeMsg = document.getElementById('welcomeMessage');
+        const visitorsList = document.getElementById('visitorsList');
+
+        // Show modal only once per session
+        if (!sessionStorage.getItem('welcomed')) {
+            setTimeout(() => {
+                overlay.classList.add('active');
+                nameInput.focus();
+            }, 800);
+        }
+
+        // Load and display visitors list
+        function displayVisitors() {
+            const visitors = JSON.parse(localStorage.getItem('visitors') || '[]');
+            visitorsList.innerHTML = '';
+
+            if (visitors.length === 0) {
+                visitorsList.innerHTML = '<li class="empty">Weli qof magac ma gelin...</li>';
+                return;
+            }
+
+            // Show last 15 visitors (newest first)
+            const recent = visitors.slice(-15).reverse();
+            recent.forEach((v, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="v-name">${v.name}</span>
+                    <span class="v-time">${v.time}</span>
+                `;
+                visitorsList.appendChild(li);
+            });
+        }
+
+        function saveVisitor(name) {
+            const visitors = JSON.parse(localStorage.getItem('visitors') || '[]');
+            const entry = {
+                name: name || 'Anonymous',
+                time: new Date().toLocaleString('en-GB'),
+                date: new Date().toISOString()
+            };
+            visitors.push(entry);
+            // Keep last 100
+            if (visitors.length > 100) visitors.shift();
+            localStorage.setItem('visitors', JSON.stringify(visitors));
+            displayVisitors(); // Update the list immediately
+        }
+
+        function closeModal(name) {
+            if (name && name.trim() !== '') {
+                welcomeMsg.innerHTML = `Mahadsanid <strong style="color:#38bdf8">${name.trim()}</strong> Walaal sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
+                saveVisitor(name.trim());
+            } else {
+                saveVisitor('Anonymous');
+            }
+            sessionStorage.setItem('welcomed', 'true');
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 1800);
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                closeModal(name);
+            } else {
+                nameInput.style.borderColor = '#f43f5e';
+                nameInput.placeholder = 'Fadlan geli magacaaga...';
+            }
+        });
+
+        skipBtn.addEventListener('click', () => {
+            closeModal(null);
+        });
+
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+
+        // Load list when page opens
+        displayVisitors();
+
+        // Optional console helper
+        window.showVisitors = function() {
+            const list = JSON.parse(localStorage.getItem('visitors') || '[]');
+            console.table(list);
+            return list;
+        };
     </script>
 </body>
 </html>

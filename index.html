@@ -9,14 +9,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+
+    <!-- Welcome Modal -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-box">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <h2>Soo dhawoow Walaal!</h2>
+            <p id="welcomeMessage">Mahadsanid Walaal sida quruxda badan ee aad noo soo booqatay SHUKRAN</p>
+            <input type="text" id="visitorName" placeholder="Magacaaga geli..." maxlength="40">
+            <div class="welcome-btns">
+                <button class="welcome-btn primary" id="submitName">
+                    <i class="fa-solid fa-check"></i> Xaqiiji
+                </button>
+                <button class="welcome-btn secondary" id="skipName">Skip</button>
+            </div>
+        </div>
+    </div>
+
     <div class="main">
         <div class="navbar">
-            <!-- Logo -->
             <div class="icon">
                 <h2 class="logo">SUHEIB SHIINE</h2>
             </div>
-
-           
+          
             <div class="menu" id="menu">
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-house"></i> HOME</a></li>
@@ -26,30 +41,26 @@
                     <li><a href="#"><i class="fa-solid fa-envelope"></i> CONTACT</a></li>
                 </ul>
             </div>
-
-           
+          
             <div class="search">
                 <input class="srch" type="search" placeholder="Type to search...">
                 <button class="btn">Search</button>
             </div>
-
-           
+          
             <div class="hamburger" id="hamburger">
                 <i class="fa-solid fa-bars"></i>
             </div>
         </div>
-
-       
+      
         <div class="content">
             <div class="image-side">
                 <img src="image/sh.jpg" alt="Web Design">
             </div>
-
             <div class="text-side">
                 <h1>Web Design & <br><span>Development</span> Course</h1>
                 <p class="par">
-                    I am a passionate web designer and developer with a keen eye for detail. 
-                    My goal is to create visually appealing and user-friendly websites that 
+                    I am a passionate web designer and developer with a keen eye for detail.
+                    My goal is to create visually appealing and user-friendly websites that
                     provide an exceptional user experience.
                 </p>
                 <button class="cn">
@@ -64,7 +75,6 @@
             <h2>My Favorite Things</h2>
             <p>Things I am passionate about and continuously improving</p>
         </div>
-
         <div class="cards">
             <div class="card">
                 <div class="card-img">
@@ -76,7 +86,6 @@
                     <p>Building modern, responsive and high-performance websites using the latest technologies.</p>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-img">
                     <img src="image/img4.png" alt="Network Engineer">
@@ -87,7 +96,6 @@
                     <p>Designing and managing reliable network infrastructures for seamless connectivity.</p>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-img">
                     <img src="image/img5.png" alt="Dropshipping">
@@ -106,7 +114,7 @@
             <div class="cta-left">
                 <h2>Ready to Start Your Project?</h2>
                 <p>
-                    Let’s work together to bring your ideas to life with modern design 
+                    Let’s work together to bring your ideas to life with modern design
                     and powerful development. I’m available for freelance work and collaborations.
                 </p>
                 <div class="cta-buttons">
@@ -118,7 +126,6 @@
                     </a>
                 </div>
             </div>
-
             <div class="cta-right">
                 <form class="cta-form">
                     <h3>Create Account</h3>
@@ -141,26 +148,23 @@
             </div>
         </div>
     </section>
-
-  
+ 
     <footer class="footer">
         <div class="footer-content">
             <p class="visitor-msg">
-                <i class="fa-solid fa-users"></i> 
+                <i class="fa-solid fa-users"></i>
                 Dadka soo booqday: <span id="finicount_views">...</span>
             </p>
             <p class="copyright">© 2026 Suheib Shiine. All rights reserved.</p>
         </div>
     </footer>
-
-  
+ 
     <script async src="//finicounter.eu.org/finicounter.js"></script>
-
-  
+ 
     <script>
+        // ========== Hamburger Menu ==========
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');
-
         hamburger.addEventListener('click', () => {
             menu.classList.toggle('active');
             const icon = hamburger.querySelector('i');
@@ -172,8 +176,7 @@
                 icon.classList.add('fa-bars');
             }
         });
-
-        
+       
         document.querySelectorAll('.menu a').forEach(link => {
             link.addEventListener('click', () => {
                 menu.classList.remove('active');
@@ -181,6 +184,73 @@
                 hamburger.querySelector('i').classList.add('fa-bars');
             });
         });
+
+        // ========== Welcome Modal + Visitor Name System ==========
+        const overlay = document.getElementById('welcomeOverlay');
+        const nameInput = document.getElementById('visitorName');
+        const submitBtn = document.getElementById('submitName');
+        const skipBtn = document.getElementById('skipName');
+        const welcomeMsg = document.getElementById('welcomeMessage');
+
+        // Show modal only once per session
+        if (!sessionStorage.getItem('welcomed')) {
+            setTimeout(() => {
+                overlay.classList.add('active');
+                nameInput.focus();
+            }, 800);
+        }
+
+        function saveVisitor(name) {
+            const visitors = JSON.parse(localStorage.getItem('visitors') || '[]');
+            const entry = {
+                name: name || 'Anonymous',
+                time: new Date().toLocaleString('en-GB'),
+                date: new Date().toISOString()
+            };
+            visitors.push(entry);
+            if (visitors.length > 100) visitors.shift();
+            localStorage.setItem('visitors', JSON.stringify(visitors));
+        }
+
+        function closeModal(name) {
+            if (name && name.trim() !== '') {
+                welcomeMsg.innerHTML = `Mahadsanid <strong style="color:#38bdf8">${name.trim()}</strong> Walaal sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
+                saveVisitor(name.trim());
+            } else {
+                saveVisitor('Anonymous');
+            }
+            sessionStorage.setItem('welcomed', 'true');
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 1800);
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                closeModal(name);
+            } else {
+                nameInput.style.borderColor = '#f43f5e';
+                nameInput.placeholder = 'Fadlan geli magacaaga...';
+            }
+        });
+
+        skipBtn.addEventListener('click', () => {
+            closeModal(null);
+        });
+
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+
+        // View visitors: open Console (F12) and type → showVisitors()
+        window.showVisitors = function() {
+            const list = JSON.parse(localStorage.getItem('visitors') || '[]');
+            console.table(list);
+            return list;
+        };
     </script>
 </body>
 </html>

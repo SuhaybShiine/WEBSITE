@@ -3,131 +3,142 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
     background: #0f172a;
     color: #333;
 }
 
-/* ========== Welcome Modal ========== */
-.welcome-overlay {
+/* ========== MODAL WELCOME ========== */
+.welcome-modal {
     position: fixed;
     inset: 0;
-    background: rgba(2, 6, 23, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    display: none; /* waxaa lagu beddelaa JS */
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
+    animation: fadeIn 0.4s ease;
 }
-
-.welcome-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.welcome-box {
-    background: linear-gradient(145deg, #0c4a6e, #0f172a);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-radius: 24px;
+.welcome-modal-content {
+    background: linear-gradient(135deg, #0f2744, #0b1120);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 28px;
     padding: 40px 35px;
     max-width: 420px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-    transform: scale(0.85);
-    transition: transform 0.4s ease;
+    color: #fff;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.5s ease;
 }
-
-.welcome-overlay.active .welcome-box {
-    transform: scale(1);
-}
-
-.welcome-box i {
+.welcome-icon {
     font-size: 48px;
     color: #38bdf8;
+    margin-bottom: 12px;
+    background: rgba(56, 189, 248, 0.15);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 18px;
 }
-
-.welcome-box h2 {
-    color: #ffffff;
-    font-size: 26px;
-    margin-bottom: 12px;
+.welcome-modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
     font-family: 'Times New Roman', serif;
+    color: #f8fafc;
 }
-
-.welcome-box p {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 25px;
+.welcome-modal-content p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 15px;
+    margin-bottom: 22px;
+    line-height: 1.5;
 }
-
-.welcome-box input {
+.welcome-modal-content input {
     width: 100%;
-    height: 48px;
-    padding: 0 18px;
-    border: 2px solid rgba(56, 189, 248, 0.4);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
     font-size: 16px;
     outline: none;
+    transition: all 0.3s;
     margin-bottom: 18px;
-    text-align: center;
 }
-
-.welcome-box input:focus {
+.welcome-modal-content input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+.welcome-modal-content input:focus {
     border-color: #38bdf8;
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
 }
-
-.welcome-box input::placeholder {
-    color: rgba(255, 255, 255, 0.45);
-}
-
-.welcome-btns {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.welcome-btn {
-    padding: 12px 28px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.welcome-btn.primary {
+.welcome-modal-content button {
     background: #38bdf8;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
     color: #0f172a;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.35);
 }
-
-.welcome-btn.primary:hover {
+.welcome-modal-content button:hover {
     background: #0ea5e9;
     transform: translateY(-2px);
 }
+.welcome-hint {
+    margin-top: 15px;
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 
-.welcome-btn.secondary {
-    background: transparent;
+/* ========== GREETING BOX ========== */
+.greeting-box {
+    background: rgba(56, 189, 248, 0.1);
+    border-left: 4px solid #38bdf8;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 17px;
+    font-weight: 500;
     color: #e2e8f0;
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.8s ease;
+}
+.greeting-box i {
+    font-size: 22px;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
 }
 
-.welcome-btn.secondary:hover {
-    border-color: #38bdf8;
-    color: #38bdf8;
-}
-
-/* ========== Main Section ========== */
+/* ========== REST OF YOUR ORIGINAL CSS (unchanged but included) ========== */
 .main {
     width: 100%;
     min-height: 100vh;
@@ -135,7 +146,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .main::before {
     content: '';
     position: absolute;
@@ -145,8 +155,6 @@ body {
         radial-gradient(circle at 85% 75%, rgba(99, 102, 241, 0.10) 0%, transparent 45%);
     pointer-events: none;
 }
-
-/* ========== Navbar ========== */
 .navbar {
     width: 100%;
     max-width: 1200px;
@@ -160,12 +168,10 @@ body {
     z-index: 10;
     gap: 20px;
 }
-
 .icon {
     flex-shrink: 0;
     margin-right: 10px;
 }
-
 .logo {
     color: #f8fafc;
     font-size: 34px;
@@ -178,7 +184,6 @@ body {
     transition: all 0.35s ease;
     cursor: pointer;
 }
-
 .logo:hover {
     letter-spacing: -3px;
     color: #38bdf8;
@@ -186,19 +191,16 @@ body {
         4px 4px 0 #0c4a6e,
         -2px -2px 0 #7dd3fc;
 }
-
 .menu {
     flex: 1;
     display: flex;
     justify-content: center;
 }
-
 .menu ul {
     display: flex;
     list-style: none;
     gap: 22px;
 }
-
 .menu ul li a {
     text-decoration: none;
     color: #e2e8f0;
@@ -212,22 +214,18 @@ body {
     align-items: center;
     gap: 8px;
 }
-
 .menu ul li a i {
     font-size: 15px;
     color: #38bdf8;
     transition: all 0.3s ease;
 }
-
 .menu ul li a:hover {
     color: #38bdf8;
 }
-
 .menu ul li a:hover i {
     color: #ffffff;
     transform: scale(1.2);
 }
-
 .menu ul li a::after {
     content: '';
     position: absolute;
@@ -238,19 +236,15 @@ body {
     left: 0;
     transition: width 0.3s ease;
 }
-
 .menu ul li a:hover::after {
     width: 100%;
 }
-
-/* Search */
 .search {
     display: flex;
     align-items: center;
     flex-shrink: 0;
     margin-left: 15px;
 }
-
 .srch {
     width: 190px;
     height: 42px;
@@ -264,16 +258,13 @@ body {
     outline: none;
     transition: all 0.3s ease;
 }
-
 .srch::placeholder {
     color: rgba(255, 255, 255, 0.45);
 }
-
 .srch:focus {
     background: rgba(255, 255, 255, 0.1);
     border-color: #38bdf8;
 }
-
 .btn {
     height: 42px;
     padding: 0 20px;
@@ -286,12 +277,10 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-
 .btn:hover {
     background: #0ea5e9;
     border-color: #0ea5e9;
 }
-
 .hamburger {
     display: none;
     font-size: 26px;
@@ -299,8 +288,6 @@ body {
     cursor: pointer;
     z-index: 20;
 }
-
-/* ========== Content ========== */
 .content {
     max-width: 1200px;
     margin: 0 auto;
@@ -313,14 +300,12 @@ body {
     position: relative;
     z-index: 5;
 }
-
 .image-side {
     flex: 1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
-
 .image-side img {
     max-width: 100%;
     width: 420px;
@@ -329,35 +314,29 @@ body {
     border: 3px solid rgba(56, 189, 248, 0.25);
     transition: transform 0.4s ease;
 }
-
 .image-side img:hover {
     transform: scale(1.04);
 }
-
 .text-side {
     flex: 1;
     max-width: 520px;
     text-align: left;
 }
-
 .text-side h1 {
     font-family: 'Times New Roman', serif;
     font-size: 50px;
     line-height: 1.2;
     margin-bottom: 22px;
 }
-
 .text-side h1 span {
     color: #38bdf8;
 }
-
 .text-side .par {
     font-size: 16px;
     line-height: 1.75;
     margin-bottom: 32px;
     color: rgba(255, 255, 255, 0.85);
 }
-
 .cn {
     height: 52px;
     background: #38bdf8;
@@ -368,7 +347,6 @@ body {
     box-shadow: 0 10px 28px rgba(56, 189, 248, 0.35);
     padding: 0 30px;
 }
-
 .cn a {
     text-decoration: none;
     color: #0f172a;
@@ -378,19 +356,15 @@ body {
     align-items: center;
     gap: 10px;
 }
-
 .cn:hover {
     background: #0ea5e9;
     transform: translateY(-4px);
     box-shadow: 0 14px 32px rgba(56, 189, 248, 0.45);
 }
-
-/* ========== Favorites Section ========== */
 .favorites {
     padding: 90px 20px;
     background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
 }
-
 .favorites-header {
     text-align: center;
     margin-bottom: 55px;
@@ -398,7 +372,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-
 .favorites-header h2 {
     font-size: 38px;
     background: linear-gradient(90deg, #0c4a6e, #38bdf8);
@@ -408,12 +381,10 @@ body {
     margin-bottom: 12px;
     font-family: 'Times New Roman', serif;
 }
-
 .favorites-header p {
     color: #475569;
     font-size: 16px;
 }
-
 .cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -421,7 +392,6 @@ body {
     max-width: 1200px;
     margin: 0 auto;
 }
-
 .card {
     background: #ffffff;
     border-radius: 20px;
@@ -430,42 +400,34 @@ body {
     transition: all 0.35s ease;
     border: 1px solid #e0f2fe;
 }
-
 .card:hover {
     transform: translateY(-14px);
     box-shadow: 0 22px 45px rgba(14, 165, 233, 0.18);
 }
-
 .card:nth-child(1) { border-bottom: 4px solid #38bdf8; }
 .card:nth-child(2) { border-bottom: 4px solid #14b8a6; }
 .card:nth-child(3) { border-bottom: 4px solid #f43f5e; }
-
 .card-img {
     width: 100%;
     height: 210px;
     overflow: hidden;
 }
-
 .card-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
-
 .card:hover .card-img img {
     transform: scale(1.09);
 }
-
 .card-content {
     padding: 28px 24px;
     text-align: center;
 }
-
 .card:nth-child(1) .card-icon { background: linear-gradient(135deg, #0c4a6e, #38bdf8); }
 .card:nth-child(2) .card-icon { background: linear-gradient(135deg, #0f766e, #14b8a6); }
 .card:nth-child(3) .card-icon { background: linear-gradient(135deg, #be123c, #f43f5e); }
-
 .card-icon {
     width: 58px;
     height: 58px;
@@ -479,31 +441,25 @@ body {
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
 }
-
 .card:hover .card-icon {
     transform: scale(1.1);
 }
-
 .card-content h3 {
     font-size: 21px;
     color: #0c4a6e;
     margin-bottom: 12px;
 }
-
 .card-content p {
     font-size: 14.5px;
     color: #64748b;
     line-height: 1.65;
 }
-
-/* ========== CTA Section ========== */
 .cta {
     background: linear-gradient(135deg, #0c4a6e 0%, #0f172a 55%, #020617 100%);
     padding: 90px 20px;
     position: relative;
     overflow: hidden;
 }
-
 .cta::before {
     content: '';
     position: absolute;
@@ -513,7 +469,6 @@ body {
         radial-gradient(circle at 75% 65%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
     pointer-events: none;
 }
-
 .cta-wrapper {
     max-width: 1100px;
     margin: 0 auto;
@@ -524,18 +479,15 @@ body {
     position: relative;
     z-index: 2;
 }
-
 .cta-left {
     flex: 1;
     color: #ffffff;
 }
-
 .cta-left h2 {
     font-size: 38px;
     margin-bottom: 18px;
     font-family: 'Times New Roman', serif;
 }
-
 .cta-left p {
     font-size: 16px;
     color: rgba(255, 255, 255, 0.85);
@@ -543,13 +495,11 @@ body {
     margin-bottom: 30px;
     max-width: 460px;
 }
-
 .cta-buttons {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
 }
-
 .cta-btn {
     display: inline-flex;
     align-items: center;
@@ -561,34 +511,28 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
 }
-
 .cta-btn.primary {
     background: #38bdf8;
     color: #0f172a;
     box-shadow: 0 8px 25px rgba(56, 189, 248, 0.35);
 }
-
 .cta-btn.primary:hover {
     background: #0ea5e9;
     transform: translateY(-3px);
 }
-
 .cta-btn.secondary {
     background: transparent;
     color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.35);
 }
-
 .cta-btn.secondary:hover {
     border-color: #38bdf8;
     color: #38bdf8;
     transform: translateY(-3px);
 }
-
 .cta-right {
     flex: 0 0 380px;
 }
-
 .cta-form {
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(14px);
@@ -597,18 +541,15 @@ body {
     padding: 35px 30px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
 }
-
 .cta-form h3 {
     color: #ffffff;
     font-size: 24px;
     margin-bottom: 25px;
     text-align: center;
 }
-
 .form-group {
     margin-bottom: 16px;
 }
-
 .form-group input {
     width: 100%;
     height: 48px;
@@ -621,17 +562,14 @@ body {
     outline: none;
     transition: all 0.3s ease;
 }
-
 .form-group input::placeholder {
     color: rgba(255, 255, 255, 0.45);
 }
-
 .form-group input:focus {
     border-color: #38bdf8;
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
-
 .form-btn {
     width: 100%;
     height: 50px;
@@ -650,25 +588,20 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
 }
-
 .form-btn:hover {
     background: #0ea5e9;
     transform: translateY(-3px);
 }
-
-/* ========== Footer ========== */
 .footer {
     background: #020617;
     padding: 30px 20px;
     text-align: center;
     border-top: 1px solid rgba(56, 189, 248, 0.15);
 }
-
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
 }
-
 .visitor-msg {
     color: #38bdf8;
     font-size: 18px;
@@ -679,17 +612,15 @@ body {
     justify-content: center;
     gap: 10px;
 }
-
 .visitor-msg i {
     font-size: 20px;
 }
-
 .copyright {
     color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
 }
 
-/* ========== Responsive ========== */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
     .navbar {
         flex-wrap: wrap;
@@ -697,11 +628,9 @@ body {
         padding: 18px 20px;
         gap: 16px;
     }
-
     .hamburger {
         display: block;
     }
-
     .menu {
         order: 3;
         width: 100%;
@@ -712,121 +641,103 @@ body {
         margin-top: 15px;
         border: 1px solid rgba(56, 189, 248, 0.2);
     }
-
     .menu.active {
         display: block;
     }
-
     .menu ul {
         flex-direction: column;
         gap: 18px;
         align-items: center;
     }
-
     .search {
         margin-left: 0;
         order: 2;
     }
-
     .srch {
         width: 150px;
     }
-
     .content {
         flex-direction: column;
         text-align: center;
         padding: 40px 20px 60px;
     }
-
     .image-side {
         justify-content: center;
         order: 1;
     }
-
     .text-side {
         order: 2;
         max-width: 100%;
         text-align: center;
     }
-
     .text-side h1 {
         font-size: 34px;
     }
-
     .image-side img {
         width: 300px;
         margin-bottom: 25px;
     }
-
     .cards {
         grid-template-columns: 1fr;
         max-width: 380px;
         margin: 0 auto;
     }
-
     .cta-wrapper {
         flex-direction: column;
         text-align: center;
     }
-
     .cta-left p {
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
     }
-
     .cta-buttons {
         justify-content: center;
     }
-
     .cta-right {
         flex: 0 0 auto;
         width: 100%;
         max-width: 400px;
     }
+    .greeting-box {
+        justify-content: center;
+        font-size: 15px;
+        flex-wrap: wrap;
+    }
 }
-
 @media (max-width: 500px) {
     .logo {
         font-size: 26px;
         letter-spacing: -3px;
     }
-
     .srch {
         width: 120px;
         font-size: 13px;
     }
-
     .btn {
         padding: 0 14px;
         font-size: 13px;
     }
-
     .text-side h1 {
         font-size: 28px;
     }
-
     .text-side .par {
         font-size: 15px;
     }
-
     .favorites-header h2 {
         font-size: 28px;
     }
-
     .cta-left h2 {
         font-size: 28px;
     }
-
     .visitor-msg {
         font-size: 16px;
     }
-
-    .welcome-box {
-        padding: 30px 22px;
+    .welcome-modal-content {
+        padding: 30px 20px;
     }
-
-    .welcome-box h2 {
-        font-size: 22px;
+    .greeting-box {
+        font-size: 14px;
+        padding: 10px 14px;
     }
 }

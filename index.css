@@ -10,7 +10,7 @@ body {
     color: #333;
 }
 
-/* ===== Hero Section ===== */
+
 .main {
     width: 100%;
     min-height: 100vh;
@@ -29,7 +29,7 @@ body {
     pointer-events: none;
 }
 
-/* ===== Navbar ===== */
+
 .navbar {
     width: 100%;
     max-width: 1200px;
@@ -44,7 +44,7 @@ body {
     gap: 20px;
 }
 
-/* Logo */
+
 .icon {
     flex-shrink: 0;
     margin-right: 10px;
@@ -71,7 +71,7 @@ body {
         -2px -2px 0 #7dd3fc;
 }
 
-/* Menu */
+
 .menu {
     flex: 1;
     display: flex;
@@ -128,7 +128,7 @@ body {
     width: 100%;
 }
 
-/* Search - dhanka midig */
+/* Search */
 .search {
     display: flex;
     align-items: center;
@@ -177,7 +177,16 @@ body {
     border-color: #0ea5e9;
 }
 
-/* ===== Hero Content (Image Left - Text Right) ===== */
+
+.hamburger {
+    display: none;
+    font-size: 26px;
+    color: #38bdf8;
+    cursor: pointer;
+    z-index: 20;
+}
+
+
 .content {
     max-width: 1200px;
     margin: 0 auto;
@@ -262,7 +271,7 @@ body {
     box-shadow: 0 14px 32px rgba(56, 189, 248, 0.45);
 }
 
-/* ===== Favorites ===== */
+
 .favorites {
     padding: 90px 20px;
     background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
@@ -373,7 +382,7 @@ body {
     line-height: 1.65;
 }
 
-/* ===== CTA + Form ===== */
+
 .cta {
     background: linear-gradient(135deg, #0c4a6e 0%, #0f172a 55%, #020617 100%);
     padding: 90px 20px;
@@ -533,7 +542,39 @@ body {
     transform: translateY(-3px);
 }
 
-/* ===== Responsive ===== */
+
+.footer {
+    background: #020617;
+    padding: 30px 20px;
+    text-align: center;
+    border-top: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.visitor-msg {
+    color: #38bdf8;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.visitor-msg i {
+    font-size: 20px;
+}
+
+.copyright {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+}
+
 @media (max-width: 900px) {
     .navbar {
         flex-wrap: wrap;
@@ -542,25 +583,38 @@ body {
         gap: 16px;
     }
 
+    .hamburger {
+        display: block;
+    }
+
     .menu {
         order: 3;
         width: 100%;
-        justify-content: center;
-        margin-top: 10px;
+        display: none;
+        background: rgba(15, 23, 42, 0.98);
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 15px;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .menu.active {
+        display: block;
     }
 
     .menu ul {
-        gap: 16px;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
     }
 
     .search {
         margin-left: 0;
+        order: 2;
     }
 
     .srch {
-        width: 160px;
+        width: 150px;
     }
 
     .content {
@@ -614,5 +668,42 @@ body {
         flex: 0 0 auto;
         width: 100%;
         max-width: 400px;
+    }
+}
+
+@media (max-width: 500px) {
+    .logo {
+        font-size: 26px;
+        letter-spacing: -3px;
+    }
+
+    .srch {
+        width: 120px;
+        font-size: 13px;
+    }
+
+    .btn {
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    .text-side h1 {
+        font-size: 28px;
+    }
+
+    .text-side .par {
+        font-size: 15px;
+    }
+
+    .favorites-header h2 {
+        font-size: 28px;
+    }
+
+    .cta-left h2 {
+        font-size: 28px;
+    }
+
+    .visitor-msg {
+        font-size: 16px;
     }
 }

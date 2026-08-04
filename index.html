@@ -16,8 +16,8 @@
                 <h2 class="logo">SUHEIB SHIINE</h2>
             </div>
 
-            <!-- Menu -->
-            <div class="menu">
+           
+            <div class="menu" id="menu">
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-house"></i> HOME</a></li>
                     <li><a href="#"><i class="fa-solid fa-user"></i> ABOUT</a></li>
@@ -27,14 +27,19 @@
                 </ul>
             </div>
 
-            <!-- Search -->
+           
             <div class="search">
                 <input class="srch" type="search" placeholder="Type to search...">
                 <button class="btn">Search</button>
             </div>
+
+           
+            <div class="hamburger" id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
 
-        <!-- Hero Content (Image Left + Text Right) -->
+       
         <div class="content">
             <div class="image-side">
                 <img src="image/sh.jpg" alt="Web Design">
@@ -54,7 +59,6 @@
         </div>
     </div>
 
-    <!-- ========== Favorites ========== -->
     <section class="favorites">
         <div class="favorites-header">
             <h2>My Favorite Things</h2>
@@ -97,7 +101,6 @@
         </div>
     </section>
 
-    <!-- ========== Call To Action + Form ========== -->
     <section class="cta">
         <div class="cta-wrapper">
             <div class="cta-left">
@@ -137,6 +140,47 @@
                 </form>
             </div>
         </div>
-    </section> 
+    </section>
+
+  
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="visitor-msg">
+                <i class="fa-solid fa-users"></i> 
+                Dadka soo booqday: <span id="finicount_views">...</span>
+            </p>
+            <p class="copyright">© 2026 Suheib Shiine. All rights reserved.</p>
+        </div>
+    </footer>
+
+  
+    <script async src="//finicounter.eu.org/finicounter.js"></script>
+
+  
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+
+        hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            if (menu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        
+        document.querySelectorAll('.menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+                hamburger.querySelector('i').classList.remove('fa-xmark');
+                hamburger.querySelector('i').classList.add('fa-bars');
+            });
+        });
+    </script>
 </body>
 </html>

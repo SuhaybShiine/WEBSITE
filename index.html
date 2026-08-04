@@ -118,8 +118,8 @@
             <div class="cta-left">
                 <h2>Ready to Start Your Project?</h2>
                 <p>
-                    Let’s work together to bring your ideas to life with modern design
-                    and powerful development. I’m available for freelance work and collaborations.
+                    Let's work together to bring your ideas to life with modern design
+                    and powerful development. I'm available for freelance work and collaborations.
                 </p>
                 <div class="cta-buttons">
                     <a href="#" class="cta-btn primary">
@@ -153,7 +153,7 @@
         </div>
     </section>
 
-    <!-- ====== QAYBTA DADKA SOO BOOQDAY (TABLE - WAQTI DHAN) ====== -->
+    <!-- ====== QAYBTA DADKA SOO BOQDAY (TABLE - WAQTI DHAN) ====== -->
     <section class="visitor-log">
         <div class="log-container">
             <div class="log-header">
@@ -217,7 +217,6 @@
             query, 
             orderBy, 
             onSnapshot,
-            getDocs,
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -245,8 +244,8 @@
                 if (logCount) logCount.textContent = '0';
                 return;
             }
-            // U kala sooc kuwa ugu cusub (hadii aan sida loo soo kala saarin)
-            const sorted = [...dataArray].reverse(); // kuwa ugu dambeeyay ugu sareeya
+            // U kala sooc kuwa ugu cusub
+            const sorted = [...dataArray].reverse();
             tbody.innerHTML = sorted.map(entry => `
                 <tr>
                     <td><strong>${escapeHtml(entry.name || 'Unknown')}</strong></td>
@@ -264,9 +263,9 @@
         }
 
         // ================================================================
-        // 2. DHEGEYSO FIREBASE (Real-time) - Had iyo jeer waxay soo cusboonaysaa
+        // 2. DHEGEYSO FIREBASE (Real-time)
         // ================================================================
-        const q = query(visitorsRef, orderBy("createdAt", "desc")); // Kuwa ugu dambeeyay hore
+        const q = query(visitorsRef, orderBy("createdAt", "desc"));
         let allData = [];
 
         onSnapshot(q, (snapshot) => {
@@ -278,14 +277,12 @@
             renderTable(allData);
         }, (error) => {
             console.error("Firebase error:", error);
-            // Haddii qalad dhaco, tusaale u sheeg isticmaale inuu hubiyo config-ka
             tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#f43f5e;padding:20px;">Qalad ayaa dhacay. Hubi in Firefox config-ka sax yahay & Internet-ka shaqeynayo.</td></tr>`;
         });
 
         // ================================================================
-        // 3. MODAL SOO DHAWEYN + U DIR FIREBASE
+        // 3. MODAL SOO DHAWEYN + U DIR FIREBASE (SI TOOS AH)
         // ================================================================
-        // Hubi haddii qofkan hore u soo galay (kaydin local)
         const hasSubmitted = localStorage.getItem('firebaseSubmitted');
 
         if (hasSubmitted) {
@@ -296,7 +293,10 @@
             modal.style.display = 'flex';
         }
 
-        welcomeBtn.addEventListener('click', async () => {
+        // ================================================================
+        // WELCOME BUTTON - HADDAN SI TOOS AH U XIRA MODAL-KA
+        // ================================================================
+        welcomeBtn.addEventListener('click', () => {
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
 
@@ -309,7 +309,19 @@
                 return;
             }
 
-            // Diyaari waqtiga
+            // -----------------------------------------------------------------
+            // 1. SI TOOS AH U QARI MODAL (Bogga isla markiiba wuu soo baxayaa)
+            // -----------------------------------------------------------------
+            modal.style.display = 'none';
+
+            // 2. Cusboonaysii farriinta soo dhaweynta isla markiiba
+            greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
+
+            // 3. Kaydi local si uusan modal mar kale u soo bixin
+            localStorage.setItem('firebaseSubmitted', 'true');
+            localStorage.setItem('visitorName', name);
+
+            // 4. Diyaari waqtiga
             const now = new Date();
             const timestamp = now.toLocaleString('en-GB', {
                 day: '2-digit',
@@ -320,37 +332,25 @@
                 second: '2-digit'
             }).replace(/\//g, '/');
 
-            try {
-                // Ku dar Firestore
-                await addDoc(visitorsRef, {
-                    name: name,
-                    email: email,
-                    timestamp: timestamp,
-                    createdAt: new Date() // si loo kala saaro
-                });
-
-                // Kaydi local si aan modal mar kale u soo bixin
-                localStorage.setItem('firebaseSubmitted', 'true');
-                localStorage.setItem('visitorName', name);
-
-                // Qari modal
-                modal.style.display = 'none';
-                greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
-
-                // Table-ka waxaa si toos ah u cusboonaysiinaya onSnapshot
-
-            } catch (error) {
-                alert('Qalad ayaa dhacay. Hubi internet-kaaga ama Firebase config-ka.');
-                console.error("Error adding document: ", error);
-            }
+            // 5. Firebase ku dar BACKGROUND (si uusan bogga u xannixin)
+            //    Waxaan isticmaalnaa .then().catch() si uusan UI-ka u hakin.
+            addDoc(visitorsRef, {
+                name: name,
+                email: email,
+                timestamp: timestamp,
+                createdAt: new Date()
+            }).catch((error) => {
+                // Haddii qalad dhaco, kaliya console ku qor, si uusan isticmaale u argagaxin
+                console.error("Firebase qalad (laakin waa background): ", error);
+            });
         });
 
-        // U oggolow Enter-ka
+        // U oggolow Enter-ka (si toos ah)
         nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
         emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
 
         // ================================================================
-        // 4. HAMBURGER MENU (sidoo kale)
+        // 4. HAMBURGER MENU
         // ================================================================
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');

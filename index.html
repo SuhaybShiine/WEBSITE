@@ -9,24 +9,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-    <!-- ====== MODAL SOO DHAWEYN ====== -->
+   
     <div class="welcome-modal" id="welcomeModal">
         <div class="welcome-modal-content">
             <div class="welcome-icon">
                 <i class="fa-solid fa-hand-wave"></i>
             </div>
             <h2>Soo Dhawoow!</h2>
-            <p>Fadlan gali magacaaga iyo email-kaaga si aad ugu soo biirto liiska booqdayaasha</p>
+            <p>Fadlan gali magacaaga si aad ugu soo biirto liiska booqdayaasha</p>
             <input type="text" id="nameInput" placeholder="Magacaa..." maxlength="30" />
-            <input type="email" id="emailInput" placeholder="Gmail ama Email-ka..." maxlength="50" />
             <button id="welcomeBtn"><i class="fa-solid fa-arrow-right"></i> Soco</button>
             <p class="welcome-hint">Dadka kale waxay arki doonaan magacaaga</p>
         </div>
     </div>
 
-    <!-- ====== BOGGA WEYN ====== -->
     <div class="main">
-        <!-- Navbar -->
+        
         <div class="navbar">
             <div class="icon">
                 <h2 class="logo">SUHEIB SHIINE</h2>
@@ -49,12 +47,15 @@
             </div>
         </div>
 
-        <!-- Content -->
+    
         <div class="content">
             <div class="image-side">
                 <img src="image/sh.jpg" alt="Web Design" />
             </div>
             <div class="text-side">
+               
+         
+
                 <div id="greetingMessage" class="greeting-box">
                     <i class="fa-solid fa-heart" style="color: #f43f5e;"></i>
                     <span id="greetingText">Mahadsanid Walaal</span>
@@ -72,7 +73,7 @@
         </div>
     </div>
 
-    <!-- ====== FAVORITES ====== -->
+    <!-- ====== FAVORITES (Sawiradii waa la sii haystaa) ====== -->
     <section class="favorites">
         <div class="favorites-header">
             <h2>My Favorite Things</h2>
@@ -112,7 +113,7 @@
         </div>
     </section>
 
-    <!-- ====== CTA ====== -->
+  
     <section class="cta">
         <div class="cta-wrapper">
             <div class="cta-left">
@@ -153,52 +154,19 @@
         </div>
     </section>
 
-    <!-- ====== QAYBTA DADKA SOO BOQDAY (TABLE) ====== -->
-    <section class="visitor-log">
-        <div class="log-container">
-            <div class="log-header">
-                <h2><i class="fa-solid fa-users"></i> Dadka soo Booqday</h2>
-                <p class="log-sub">
-                    Tirada guud: <span id="logCount">0</span>
-                </p>
-            </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Magaca</th>
-                            <th>Gmail / Email</th>
-                            <th>Waqtiga</th>
-                        </tr>
-                    </thead>
-                    <tbody id="visitorTableBody">
-                        <!-- JS ayaa buuxinaya -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- ====== FOOTER ====== -->
+   
     <footer class="footer">
-        <div class="footer-content">
-            <p class="visitor-msg">
-                <i class="fa-solid fa-users"></i>
-                Dadka soo booqday: <span id="finicount_views">...</span>
-            </p>
+    
             <p class="copyright">© 2026 Suheib Shiine. All rights reserved.</p>
         </div>
     </footer>
 
     <script async src="//finicounter.eu.org/finicounter.js"></script>
 
-    <!-- ============================================================ -->
-    <!-- FIREBASE (Waa inaad ku beddeshaa config-kaaga)                -->
-    <!-- ============================================================ -->
+   
+  
     <script type="module">
-        // ------------------------------------------------------------------
-        // !!! KU BEDDEL HALKAN FIREBASE CONFIG-KAAGA (Nuqul ka qaado Firebase Console) !!!
-        // ------------------------------------------------------------------
+    
         const firebaseConfig = {
             apiKey: "AIzaSyDummy_Example_ReplaceMe",
             authDomain: "your-project.firebaseapp.com",
@@ -224,48 +192,31 @@
         const db = getFirestore(app);
         const visitorsRef = collection(db, "visitors");
 
-        // ================================================================
-        // ELEMENTS
-        // ================================================================
+   
         const modal = document.getElementById('welcomeModal');
         const nameInput = document.getElementById('nameInput');
-        const emailInput = document.getElementById('emailInput');
         const welcomeBtn = document.getElementById('welcomeBtn');
         const greetingText = document.getElementById('greetingText');
-        const tbody = document.getElementById('visitorTableBody');
-        const logCount = document.getElementById('logCount');
+        const totalVisitorCount = document.getElementById('totalVisitorCount');
 
-        // ================================================================
-        // 1. RENDER TABLE (Waxay soo bandhigtaa liiska dadka oo dhan)
-        // ================================================================
-        function renderTable(dataArray) {
-            if (!dataArray || dataArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:rgba(255,255,255,0.5);padding:30px 0;">Wali ma jiro qof soo booqday</td></tr>`;
-                if (logCount) logCount.textContent = '0';
-                return;
+      
+        const q = query(visitorsRef, orderBy("createdAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
+            // Tirada wadarta ah ee booqdayaasha
+            const count = snapshot.size;
+            if (totalVisitorCount) totalVisitorCount.textContent = count;
+            
+            if (count === 0) {
+                migrateLocalData();
             }
-            // U kala sooc kuwa ugu cusub (kuwa ugu dambeeyay hore)
-            const sorted = [...dataArray].reverse();
-            tbody.innerHTML = sorted.map(entry => `
-                <tr>
-                    <td><strong>${escapeHtml(entry.name || 'Unknown')}</strong></td>
-                    <td><i class="fa-regular fa-envelope" style="color:#38bdf8;margin-right:6px;"></i>${escapeHtml(entry.email || 'No email')}</td>
-                    <td><i class="fa-regular fa-clock" style="color:#94a3b8;margin-right:6px;"></i>${escapeHtml(entry.timestamp || 'Just now')}</td>
-                </tr>
-            `).join('');
-            if (logCount) logCount.textContent = dataArray.length;
-        }
+        }, (error) => {
+            console.error("Firebase error:", error);
+          
+            migrateLocalData();
+        });
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // ================================================================
-        // 2. MIGRATION: KA SOO GUURI LOCALSTORAGE => FIREBASE (SI TOOS AH)
-        //    (Si aadan 47-ka qof ee hore u jirtay u lumin)
-        // ================================================================
+  
         function migrateLocalData() {
             const localLog = localStorage.getItem('visitorLog');
             const migratedFlag = localStorage.getItem('migratedToFirebase');
@@ -274,20 +225,15 @@
                 try {
                     const entries = JSON.parse(localLog);
                     if (entries.length > 0) {
-                        // Ku dar wax walba si toos ah (background)
                         entries.forEach((entry, index) => {
-                            // Dib ugu dar si looga fogaado duplicte (laakin waan ku dari karnaa)
-                            // Si looga fogaado in ay soo noqoto, waxaan isticmaalnaa delay yar si uusan u culeyn
                             setTimeout(() => {
                                 addDoc(visitorsRef, {
                                     name: entry.name,
-                                    email: entry.email,
                                     timestamp: entry.timestamp || new Date().toLocaleString('en-GB'),
                                     createdAt: new Date()
                                 }).catch(e => console.log("Migration error for entry", index, e));
-                            }, index * 100); // 0.1 seconds between each to avoid rate limits
+                            }, index * 100);
                         });
-                        // Calaamadee in la soo guuray
                         localStorage.setItem('migratedToFirebase', 'true');
                         console.log(`🚀 Migrating ${entries.length} visitors from localStorage to Firebase...`);
                     }
@@ -297,37 +243,7 @@
             }
         }
 
-        // ================================================================
-        // 3. DHEGEYSO FIREBASE (Real-time) - Dadka oo dhan
-        // ================================================================
-        const q = query(visitorsRef, orderBy("createdAt", "desc"));
-        let allData = [];
-
-        onSnapshot(q, (snapshot) => {
-            const results = [];
-            snapshot.forEach((doc) => {
-                results.push(doc.data());
-            });
-            allData = results;
-            renderTable(allData);
-            
-            // Marka ugu horreysa ee data soo baxdo, wakhti fiican oo migration ku sameeyo
-            if (allData.length === 0) {
-                // Haddii aan waxba jirin, tusaale u samee migration si toos ah
-                migrateLocalData();
-            }
-        }, (error) => {
-            console.error("Firebase error:", error);
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#f43f5e;padding:20px;">
-                <i class="fa-solid fa-triangle-exclamation"></i> Qalad ayaa dhacay. Hubi in Firebase config-ka sax yahay & Internet-ka shaqeynayo.
-            </td></tr>`;
-            // Haddii qalad dhaco, wali isku day inaad soo guuriso local data
-            migrateLocalData();
-        });
-
-        // ================================================================
-        // 4. MODAL SOO DHAWEYN (Si toos ah u xir + u dir Firebase)
-        // ================================================================
+  
         const hasSubmitted = localStorage.getItem('firebaseSubmitted');
 
         if (hasSubmitted) {
@@ -340,28 +256,22 @@
 
         welcomeBtn.addEventListener('click', () => {
             const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
 
             if (name === '') {
                 alert('Fadlan gali magacaa.');
                 return;
             }
-            if (email === '' || !email.includes('@')) {
-                alert('Fadlan gali email sax ah (waxaa ku jirta @).');
-                return;
-            }
 
-            // 1. SI TOOS AH U QARI MODAL
+           
             modal.style.display = 'none';
 
-            // 2. Cusboonaysii farriinta
             greetingText.textContent = `Mahadsanid Walaal ${name} sida quruxda badan ee aad noo soo booqatay SHUKRAN`;
 
-            // 3. Kaydi local si uusan modal mar kale u soo bixin
+          
             localStorage.setItem('firebaseSubmitted', 'true');
             localStorage.setItem('visitorName', name);
 
-            // 4. Diyaari waqtiga
+            
             const now = new Date();
             const timestamp = now.toLocaleString('en-GB', {
                 day: '2-digit',
@@ -372,10 +282,9 @@
                 second: '2-digit'
             }).replace(/\//g, '/');
 
-            // 5. Firebase ku dar BACKGROUND
+         
             addDoc(visitorsRef, {
                 name: name,
-                email: email,
                 timestamp: timestamp,
                 createdAt: new Date()
             }).catch((error) => {
@@ -383,13 +292,10 @@
             });
         });
 
-        // U oggolow Enter-ka
+     
         nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
-        emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') welcomeBtn.click(); });
 
-        // ================================================================
-        // 5. HAMBURGER MENU
-        // ================================================================
+      
         const hamburger = document.getElementById('hamburger');
         const menu = document.getElementById('menu');
         hamburger.addEventListener('click', () => {
@@ -412,7 +318,7 @@
             });
         });
 
-        // Marka ugu horreysa ee la soo galo, isku day inaad soo guuriso
+       
         setTimeout(migrateLocalData, 2000);
     </script>
 </body>
